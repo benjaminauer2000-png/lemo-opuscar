@@ -110,9 +110,16 @@ export function drawOverlay(t, cam, ctx) {
   // 5 · pump sizes: the body length grows with the displacement; the counter is not meant to be read in full
   if (t > LBL.size[0] - .05 && t < LBL.size[1] + .1) {
     label(t, { id: 'size', t0: LBL.size[0], t1: LBL.size[1], a: proj(wp(A.pump)), lx: 1420, ly: 330, name: 'Pumpen Baugröße 1', spec: '1,1 … 8,0 cm³/U' });
-    const L = ctx.pumpLen, x0 = -16.3, x1 = -105.8 - (L - 85), y = 112, z = -24;
-    const i = ctx.sizeIdx, cc = i >= 0 ? SIZES[i][0] : 3.2;
-    dimension(t, { id: 'dimPump', t0: LBL.size[0] + .3, t1: LBL.size[1], A: P(x1, y, z), B: P(x0, y, z), ext: [[P(x1, 100, -12), P(x1, y + 4, z - 2)], [P(x0, 100, -12), P(x0, y + 4, z - 2)]], text: `${de(String(cc.toFixed(1)))} cm³/U · L ${de(String(L.toFixed(1)))} mm`, pass: true });
+    // a counter plate on the pump steps through the displacements on the beat; it is not meant to be read in full
+    const i = ctx.sizeIdx, cc = i >= 0 ? SIZES[i][0] : 3.2, k = fade(t, LBL.size[0] + .3, .3) * (1 - fade(t, LBL.size[1] - .3, .3));
+    if (k > 0) {
+      const [px, py] = proj(wp(ctx.A.pump)), txt = `${de(cc.toFixed(1))} cm³/U`;
+      g.globalAlpha = k; g.font = `500 30px ${MONO}`; const w = g.measureText(txt).width, x = px - w / 2, y = py - 70;
+      g.fillStyle = 'rgba(14,15,17,.78)'; g.fillRect(x - 14, y - 34, w + 28, 46);
+      g.fillStyle = ACC; g.fillRect(x - 14, y + 12, (w + 28) * Math.min(1, cc / 8), 3);
+      g.fillStyle = INK; g.fillText(txt, x, y);
+      if (k > .99) texts.push({ id: 'cc', text: txt, x0: x - 14, y0: y - 34, x1: x + w + 14, y1: y + 15, pass: true });
+    }
   }
   // 6 · dimensions on the closed unit (catalogue drawings, pp. 10 and 35)
   if (t > LBL.dimL[0] - .05 && t < LBL.dimL[1] + .1) {

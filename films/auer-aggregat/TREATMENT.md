@@ -1,5 +1,13 @@
 # Treatment: „Das Herz im Tank“: Hydraulikaggregat 12 V, einfachwirkend
 
+> **Stand v2 (27.11.2026), gilt vor dem Text unten:**
+> - Geometrie aus der STEP-Baugruppe des Kunden (E122021V12OD8LKW-G14, zusammengebaut + Explosionsansicht); die Teile fahren entlang der SolidWorks-Explosionsvektoren auseinander.
+> - Tank 8 L (180 × 180 × 335 mm), Anschlüsse G 1/4". Blick wie auf dem Kundenfoto: von der Ventilseite (Magnetspule, Relais).
+> - Pumpe behält immer ihre CAD-Form; Shot 6 zeigt die Förderbereiche 1,1 → 8,0 cm³/U als Zählerschild auf der Pumpe, im Takt, mit kurzem Aufleuchten (Kundenwunsch).
+> - Vor dem Ölweg setzt sich die Hydraulik während der Kamerafahrt wieder zusammen; Tank und Motor bleiben weg.
+> - Länge 48 s (20 Takte à 2,4 s); Ölweg 19,2–31,2 s, Pumpe 31,2–36 s, Schließen 36–38,4 s, Maße bis 42,6 s, Logo-Tafel 42,6–48 s.
+> - Endmaße: Tank 335 mm und 180 mm, Motor Ø 114 mm (aus der STEP gemessen). Hinweiszeile „Geometrie: AUER CAD-Daten“.
+
 **Stil:** Exploded Teardown (fest: `styles/teardown/STYLE.md`).
 **Format:** 1920 × 1080, 24 fps, ca. 41 s. Keine Stimme, keine Untertitel. Musik, Geräusche und Beschriftung auf Deutsch.
 **Produkt:** AUER Hydraulics, einfachwirkendes Kompaktaggregat 12 V, gebaut aus Katalogteilen:

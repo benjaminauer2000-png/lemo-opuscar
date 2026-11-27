@@ -13,6 +13,7 @@ import * as TL from './timeline.js';
 const { T, DUR, UP, RET, DOWN, UPDUR, DOWNDUR, GAP, CAM, SIZES, SIZE_T } = TL;
 const W = 1920, H = 1080;
 const Q = new URLSearchParams(location.search);
+const NOGL = Q.has('nogl');   // readcheck only: skip the WebGL frame, keep the overlay
 const AX = 72;   // manifold axis height above the floor (tank underside = floor)
 
 // ---------- renderer / scene ----------
@@ -245,8 +246,9 @@ window.render = t => {
   for (const k of Object.keys(G)) { const p = layerPos(k, t); G[k].position.set(...p); }
   // the pump alone at the start: everything else arrives later
   for (const k of Object.keys(IN)) G[k].visible = t > IN[k][0] - .9;
-  const L = pumpLen(t); setPumpLength(L);
-  for (const k of ['elbow', 'filter']) G[k].position.x -= L - 85;
+  const L = 85;   // the pump keeps its real CAD shape across all displacements (customer, 27.11.2026)
+  const sizes = SIZE_T.map(s => Math.exp(-Math.max(0, t - s) * 5) * (t >= s ? 1 : 0)).reduce((a, b) => Math.max(a, b), 0);
+  M.pumpBody.emissive.copy(ACC); M.pumpBody.emissiveIntensity = .22 * sizes;
   // flow: the manifold and the pump become see-through while the oil runs; the oil draws along its path
   const xr = seg(t, T.dive + .2, T.lift - .1) * (1 - seg(t, T.hush2 - .2, T.hush2 + .3));
   for (const m of fadeMats) { m.opacity = 1 - .72 * xr; m.depthWrite = xr < .05; }
@@ -264,7 +266,7 @@ window.render = t => {
   pumpLight.intensity = .5 * (1 - seg(t, T.mfIn, T.mfIn + 1)); pumpLight.position.set(-60, 260, -260); pumpLight.lookAt(-60, 58, 0);
   post.vig.uniforms.fade.value = ss(seg(t, 0, .9));
   setCamera(t);
-  post.composer.render();
+  if (!NOGL) post.composer.render();
   drawOverlay(t, camera, { A, W, H, pumpLen: L, sizeIdx: pumpSizeIdx(t), G, AX });
 };
 window.TEXTS = () => overlayTexts();

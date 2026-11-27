@@ -1,0 +1,24 @@
+Hydraulikaggregat 12 V · AUER Hydraulics GmbH — Credits and licences
+
+Product, geometry, logo, photo
+  Geometry: AUER Hydraulics GmbH, SolidWorks assembly E122021V12OD8LKW-G14 (STEP AP214), supplied by the customer.
+  Logo and reference photo: AUER Hydraulics GmbH, supplied by the customer.
+  Technical data: AUER Hydraulics Gesamtkatalog (auer-hydraulics.com) and the customer's brief; see FACTS.md.
+
+Fonts (SIL Open Font License 1.1; licence texts in fonts/)
+  Inter (The Inter Project Authors), via @fontsource/inter 5.1.0
+  JetBrains Mono (The JetBrains Mono Project Authors), via @fontsource/jetbrains-mono 5.1.0
+
+Lighting
+  HDRI "photo_studio_loft_hall" — Poly Haven (polyhaven.com), CC0 1.0
+
+Music samples (CC0 1.0)
+  Versilian Community Sample Library (VCSL), Versilian Studios: marimba, vibraphone, bowed vibraphone, glockenspiel, hi-hat
+  VS Chamber Orchestra: Community Edition (VSCO 2 CE), Versilian Studios: bass drum, claves
+  Karoryfer Samples (sfzinstruments): jazz double bass "Sneakybass"
+
+Software
+  three.js r170 (MIT); occt-import-js 0.0.23 (LGPL-2.1, used only to convert the STEP file, not distributed in the film);
+  FFmpeg 7.0.2 static build (GPL) for mastering.
+
+Score and sound design: original, synthesised and sampled in code for this film.

@@ -7,8 +7,8 @@ export const T = {
   mfIn: b(2), motorIn: b(2, 1.5), tankIn: b(2, 3), title: b(3),
   hush1: b(4), explode: b(5),
   dive: b(8), lift: b(8, 2), hold: b(10), lower: b(11, 2), flowEnd: b(13),
-  hush2: b(12, 3), pump: b(13), pumpBack: b(14, 3), pull: b(15),
-  close: b(15), land: b(16), dims: b(16, 1), card: b(17, 2), end: b(20),
+  hush2: b(12, 3.3), pump: b(13), pumpBack: b(14, 3), pull: b(15),
+  close: b(15), land: b(16), dims: b(16, 1), card: b(17, 3), end: b(20),
 };
 export const DUR = T.end;
 
@@ -29,14 +29,14 @@ export const SIZE_T = [b(13, 1), b(13, 2), b(13, 3), b(14, 0), b(14, 1)];
 
 // labels: [t0, t1]
 export const LBL = {
-  pump: [T.lblPump, b(1, 3.6)],
-  title: [T.title + .2, b(4, 3.6)],
+  pump: [0.9, 5.3],
+  title: [b(2, 3), b(5, 1)],
   layers: { t0: b(5, 2), step: .6, t1: b(7, 3.5) },
-  lift: [b(8, 2.2), b(9, 3.6)],
-  hold: [b(10, .2), b(11, 1.6)],
-  lower: [b(11, 2.2), b(12, 3.4)],
+  lift: [b(8, 1.3), b(10, .3)],
+  hold: [b(10, 0), b(11, 2.4)],
+  lower: [b(11, 2), b(13, .7)],
   size: [b(13, .4), b(14, 3.4)],
-  dimL: [T.dims, b(17, 1.6)], dimH: [T.dims + .5, b(17, 1.6)], dimM: [T.dims + 1.0, b(17, 1.6)], model: [T.dims + .3, b(17, 1.6)],
+  dimL: [b(15, 3.5), b(17, 3.2)], dimH: [b(16, .5), b(17, 3.2)], dimM: [b(16, 1), b(17, 3.2)], model: [b(16, 0), b(17, 3.2)],
 };
 
 // camera keys: [t, az°, el°, dist mm, target [x,y,z], fov°, view shift px]
