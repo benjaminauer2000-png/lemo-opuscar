@@ -94,7 +94,7 @@ export function drawOverlay(t, cam, ctx) {
       { id: 'motor', a: A.motor, name: 'Elektromotor', spec: '12 V · 2,0 kW · 3000 U/min' },
       { id: 'mf', a: A.mf, name: 'Steuerblock', spec: 'Aluminium · max. 250 bar' },
       { id: 'pump', a: A.pump, name: 'Zahnradpumpe', spec: '3,2 cm³/U · max. 210 bar' },
-      { id: 'tank', a: A.tank, name: 'Kunststofftank', spec: '7 Liter' },
+      { id: 'tank', a: A.tank, name: 'Kunststofftank', spec: '8 Liter' },
     ];
     const pts = items.map(o => proj(wp(o.a)));
     const order = items.map((o, i) => i).sort((i, j) => pts[i][1] - pts[j][1]);
@@ -103,26 +103,27 @@ export function drawOverlay(t, cam, ctx) {
   }
   // 4 · the oil: lift, hold, lower
   if (t > LBL.lift[0] - .05 && t < LBL.lower[1] + .1) {
-    label(t, { id: 'lift', t0: LBL.lift[0], t1: LBL.lift[1], a: proj(wp(A.P)), lx: 1420, ly: 300, name: 'Heben', spec: 'Pumpe fördert zu P' });
+    label(t, { id: 'lift', t0: LBL.lift[0], t1: LBL.lift[1], a: proj(wp(A.P)), lx: 1420, ly: 300, name: 'Heben', spec: 'Pumpe fördert zu P · G 1/4"' });
     label(t, { id: 'hold', t0: LBL.hold[0], t1: LBL.hold[1], a: proj(wp(A.CV)), lx: 1420, ly: 470, name: 'Halten', spec: 'Rückschlagventil' });
     label(t, { id: 'lower', t0: LBL.lower[0], t1: LBL.lower[1], a: proj(wp(A.SV)), lx: 1420, ly: 640, name: 'Senken', spec: 'Magnetventil + Drossel' });
   }
   // 5 · pump sizes: the body length grows with the displacement; the counter is not meant to be read in full
   if (t > LBL.size[0] - .05 && t < LBL.size[1] + .1) {
     label(t, { id: 'size', t0: LBL.size[0], t1: LBL.size[1], a: proj(wp(A.pump)), lx: 1420, ly: 330, name: 'Pumpen Baugröße 1', spec: '1,1 … 8,0 cm³/U' });
-    const L = ctx.pumpLen, x0 = -14, x1 = -14 - L - 6, y = AX + 36, z = 52;
+    const L = ctx.pumpLen, x0 = -16.3, x1 = -105.8 - (L - 85), y = 112, z = -24;
     const i = ctx.sizeIdx, cc = i >= 0 ? SIZES[i][0] : 3.2;
-    dimension(t, { id: 'dimPump', t0: LBL.size[0] + .3, t1: LBL.size[1], A: P(x1, y, z), B: P(x0, y, z), ext: [[P(x1, AX + 30, 36), P(x1, y + 4, z + 2)], [P(x0, AX + 30, 36), P(x0, y + 4, z + 2)]], text: `${de(String(cc.toFixed(1)))} cm³/U · L ${de(String(L.toFixed(1)))} mm`, pass: true });
+    dimension(t, { id: 'dimPump', t0: LBL.size[0] + .3, t1: LBL.size[1], A: P(x1, y, z), B: P(x0, y, z), ext: [[P(x1, 100, -12), P(x1, y + 4, z - 2)], [P(x0, 100, -12), P(x0, y + 4, z - 2)]], text: `${de(String(cc.toFixed(1)))} cm³/U · L ${de(String(L.toFixed(1)))} mm`, pass: true });
   }
   // 6 · dimensions on the closed unit (catalogue drawings, pp. 10 and 35)
   if (t > LBL.dimL[0] - .05 && t < LBL.dimL[1] + .1) {
-    const zf = 128;
-    dimension(t, { id: 'dimL', t0: LBL.dimL[0], t1: LBL.dimL[1], A: P(-290, 1, zf), B: P(0, 1, zf), ext: [[P(-290, 1, 92), P(-290, 1, zf + 6)], [P(0, 1, 70), P(0, 1, zf + 6)]], text: '290 mm' });
-    dimension(t, { id: 'dimH', t0: LBL.dimH[0], t1: LBL.dimH[1], A: P(-326, 0, 92), B: P(-326, 180, 92), ext: [[P(-292, 180, 92), P(-332, 180, 92)]], text: '180 mm' });
-    dimension(t, { id: 'dimM', t0: LBL.dimM[0], t1: LBL.dimM[1], A: P(250, AX - 57, 0), B: P(250, AX + 57, 0), ext: [[P(200, AX + 57, 0), P(256, AX + 57, 0)], [P(200, AX - 57, 0), P(256, AX - 57, 0)]], text: 'Ø 114 mm' });
+    // tank 335 × 180 mm and motor Ø 114 mm, measured on the STEP (FACTS.md); the camera looks from −z
+    const zf = -128, X0 = -348.84, X1 = -13.84;
+    dimension(t, { id: 'dimL', t0: LBL.dimL[0], t1: LBL.dimL[1], A: P(X0, 1, zf), B: P(X1, 1, zf), ext: [[P(X0, 1, -92), P(X0, 1, zf - 6)], [P(X1, 1, -92), P(X1, 1, zf - 6)]], text: '335 mm' });
+    dimension(t, { id: 'dimH', t0: LBL.dimH[0], t1: LBL.dimH[1], A: P(X0 - 36, 0, -92), B: P(X0 - 36, 180, -92), ext: [[P(X0 - 2, 180, -92), P(X0 - 42, 180, -92)]], text: '180 mm' });
+    dimension(t, { id: 'dimM', t0: LBL.dimM[0], t1: LBL.dimM[1], A: P(232, 15, -12), B: P(232, 129, -12), ext: [[P(186, 129, -12), P(238, 129, -12)], [P(186, 15, -12), P(238, 15, -12)]], text: 'Ø 114 mm' });
     const a = fade(t, LBL.model[0], .4) * (1 - fade(t, LBL.model[1] - .3, .3));
-    g.globalAlpha = a; g.fillStyle = DIM; g.font = `400 18px ${MONO}`; g.fillText('Modell nach Katalogmaßen', 150, 990);
-    if (a > .99) texts.push({ id: 'model', text: 'Modell nach Katalogmaßen', x0: 150, y0: 970, x1: 450, y1: 996 });
+    g.globalAlpha = a; g.fillStyle = DIM; g.font = `400 18px ${MONO}`; g.fillText('Geometrie: AUER CAD-Daten', 150, 990);
+    if (a > .99) texts.push({ id: 'model', text: 'Geometrie: AUER CAD-Daten', x0: 150, y0: 970, x1: 450, y1: 996 });
   }
   // 7 · end card: the customer's logo, line, contact
   if (t > T.card) {

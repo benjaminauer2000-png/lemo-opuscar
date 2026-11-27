@@ -12,16 +12,16 @@ export const T = {
 };
 export const DUR = T.end;
 
-// explode: per layer, along the main axis (x) and sideways; times when they leave and land
-export const LAYERS = ['tank', 'pump', 'mf', 'coil', 'motor', 'relay'];
-export const OFF = {          // [dx, dy, dz] in mm when fully apart
-  tank: [-170, 0, 0], pump: [0, 0, 0], mf: [0, 0, 0], coil: [0, -6, 60], motor: [125, 0, 0], relay: [125, -26, 70],
-};
-export const UP = { tank: T.explode, motor: T.explode + .18, relay: T.explode + .36, coil: T.explode + .54, pump: 0, mf: 0 };
-export const DOWN = { pump: 0, coil: T.close + .25, relay: T.close + .5, motor: T.close + .75, tank: T.close + 1.15, mf: 0 };
+// explode along the customer's own SolidWorks explode vectors (data/explode.json); stagger in the order the unit is taken apart
+const E = T.explode;
+export const UP = { tank: E, motor: E + .15, coil: E + .3, rv: E + .4, sv: E + .5, cv: E + .55, coup: E + .62, pump: E + .7, ret: E + .7, seal: E + .76, elbow: E + .82, filter: E + .88, bolts: E + .94 };
+// for the oil the hydraulics go back together during the dive (filter first, coil last); tank and motor stay away
+const R = T.dive - .9;
+export const RET = { filter: R, elbow: R + .08, bolts: R + .12, pump: R + .16, ret: R + .2, seal: R + .24, coup: R + .28, cv: R + .34, sv: R + .4, rv: R + .46, coil: R + .55 };
+export const DOWN = { motor: T.close + .4, tank: T.close + 1.0 };
 export const UPDUR = 1.6, DOWNDUR = 1.25;
 // during the flow the tank slides further back so the pump and its filter stand free
-export const GAP = { tank: -120, open: [T.dive - .4, T.dive + .8], close: [T.close + .2, T.close + 1.9] };
+export const GAP = { tank: -160, open: [T.dive - .4, T.dive + .8], close: [T.close, T.close + 2.0] };
 
 // pump sizes (catalogue p. 31, group 1): displacement cc/rev → body length mm
 export const SIZES = [[1.1, 75.5], [2.1, 80], [3.2, 85], [4.8, 92.5], [8.0, 109.5]];
@@ -41,21 +41,21 @@ export const LBL = {
 
 // camera keys: [t, az°, el°, dist mm, target [x,y,z], fov°, view shift px]
 export const CAM = [
-  [0.0, 30, 9, 480, [-60, 88, 0], 24, 120],
-  [b(1, 3), 46, 13, 410, [-58, 90, 0], 24, 120],
-  [T.mfIn, 48, 14, 420, [-50, 92, 0], 24, 110],
-  [b(3, 1), 36, 19, 1240, [-36, 96, 0], 26, 0],
-  [T.hush1, 30, 20, 1230, [-34, 96, 0], 26, 0],
-  [T.explode, 27, 21, 1260, [-36, 98, 0], 26, 60],
-  [b(7, 2), 40, 23, 1340, [-50, 98, 0], 26, 250],
-  [T.dive - .3, 42, 23, 1350, [-50, 98, 0], 26, 250],
-  [T.lift - .3, 2, 12, 740, [-96, 100, 0], 26, 250],
-  [T.lower, 8, 13, 720, [-92, 100, 0], 26, 250],
-  [T.hush2 + .3, 10, 14, 710, [-90, 100, 0], 26, 250],
-  [T.pump + .5, -6, 20, 560, [-74, 94, 0], 26, 240],
-  [T.pumpBack, 2, 21, 540, [-74, 94, 0], 26, 240],
-  [T.pull + .9, 34, 24, 1280, [-36, 96, 0], 26, 0],
-  [T.land, 33, 26, 1250, [-36, 94, 0], 26, 0],
-  [T.card - .2, 42, 27, 1230, [-36, 92, 0], 26, 0],
-  [T.end, 58, 22, 1380, [-36, 92, 0], 26, -330],
+  [0.0, 214, 10, 470, [-62, 60, -4], 24, 120],
+  [b(1, 3), 200, 13, 410, [-60, 60, -4], 24, 120],
+  [T.mfIn, 198, 14, 420, [-55, 62, -4], 24, 110],
+  [b(3, 1), 150, 19, 1340, [-78, 86, 0], 26, 0],
+  [T.hush1, 156, 20, 1320, [-78, 86, 0], 26, 0],
+  [T.explode, 158, 21, 1360, [-80, 88, 0], 26, 60],
+  [b(7, 2), 150, 24, 1880, [-40, 82, -50], 26, 300],
+  [T.dive - .3, 147, 24, 1890, [-40, 82, -50], 26, 300],
+  [T.lift - .3, 186, 12, 640, [-62, 78, -20], 26, 250],
+  [T.lower, 192, 13, 620, [-60, 80, -20], 26, 250],
+  [T.hush2 + .3, 194, 14, 610, [-60, 80, -20], 26, 250],
+  [T.pump + .5, 176, 22, 540, [-72, 62, -4], 26, 240],
+  [T.pumpBack, 182, 22, 520, [-72, 62, -4], 26, 240],
+  [T.pull + .9, 150, 24, 1360, [-78, 86, 0], 26, 0],
+  [T.land, 148, 26, 1330, [-78, 84, 0], 26, 0],
+  [T.card - .2, 140, 27, 1310, [-78, 84, 0], 26, 0],
+  [T.end, 125, 22, 1460, [-78, 84, 0], 26, -330],
 ];

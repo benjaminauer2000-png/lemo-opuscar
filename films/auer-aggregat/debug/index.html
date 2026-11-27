@@ -3,12 +3,13 @@
 <script type="module">
 import * as THREE from 'three';
 const Q = new URLSearchParams(location.search);
+const HIDE = Q.get("hide") ? new RegExp(Q.get("hide")) : null;
 const meta = await (await fetch('../data/parts.json')).json(), buf = await (await fetch('../data/parts.bin')).arrayBuffer();
 const r = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true }); r.setSize(1920, 1080); document.body.appendChild(r.domElement);
 const s = new THREE.Scene(); s.background = new THREE.Color('#2a2c30');
 s.add(new THREE.HemisphereLight('#ffffff', '#444444', 1.6)); const d = new THREE.DirectionalLight('#fff', 2); d.position.set(300, 800, -600); s.add(d);
 const cols = {}; let h = 0;
-for (const p of meta) {
+for (const p of meta) { if (HIDE && HIDE.test(p.part)) continue;
   const P = new Float32Array(buf, p.off, p.nv * 3), N = new Float32Array(buf, p.off + p.nv * 12, p.nv * 3), I = new Uint32Array(buf, p.off + p.nv * 24, p.ni);
   const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.BufferAttribute(P, 3)); g.setAttribute('normal', new THREE.BufferAttribute(N, 3)); g.setIndex(new THREE.BufferAttribute(I, 1));
   cols[p.part] ??= new THREE.Color().setHSL((h++ * .13) % 1, .55, .6);
@@ -16,7 +17,7 @@ for (const p of meta) {
 }
 const c = new THREE.PerspectiveCamera(30, 16 / 9, 10, 10000);
 const az = +(Q.get('az') ?? 200) * Math.PI / 180, el = +(Q.get('el') ?? 20) * Math.PI / 180, dist = +(Q.get('d') ?? 2200), tx = +(Q.get('tx') ?? -150);
-c.position.set(tx + dist * Math.cos(el) * Math.sin(az), 90 + dist * Math.sin(el), dist * Math.cos(el) * Math.cos(az)); c.lookAt(tx, 90, 0);
+c.position.set(tx + dist * Math.cos(el) * Math.sin(az), +(Q.get('ty') ?? 72) + dist * Math.sin(el), dist * Math.cos(el) * Math.cos(az)); c.lookAt(tx, +(Q.get('ty') ?? 72), 0);
 r.render(s, c);
 const cv = document.createElement('canvas'); cv.width = 1920; cv.height = 1080; cv.style.position = 'absolute'; cv.style.left = 0; cv.style.top = 0; document.body.appendChild(cv);
 const g2 = cv.getContext('2d'); g2.font = '16px sans-serif'; let y = 30;
